@@ -1,16 +1,24 @@
-# app1
+# Kantin Bu Sari
 
-A new Flutter project.
+Aplikasi Flutter untuk melihat menu kantin, mencari dan memfilter makanan, mengelola keranjang, serta mengirim detail pesanan untuk konfirmasi di kantin.
 
-## Getting Started
+## Menjalankan aplikasi
 
-This project is a starting point for a Flutter application.
+Pastikan Flutter SDK tersedia, lalu jalankan:
 
-A few resources to get you started if this is your first Flutter project:
+```sh
+flutter pub get
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Fitur
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 12 menu makanan dan minuman dengan foto JPEG lokal di `assets/images/`.
+- Pencarian, filter kategori, detail menu, dan rating.
+- Favorit dengan halaman khusus.
+- Keranjang dengan perubahan kuantitas dan ringkasan total.
+- Checkout dengan nama, makan di tempat atau bungkus, nomor meja, catatan, serta pilihan pembayaran simulasi.
+- Bukti pesanan dan riwayat pesanan.
+- Profil kantin.
+
+Menu, favorit, keranjang, dan riwayat saat ini disimpan di memori selama aplikasi berjalan. Pesanan belum terhubung ke sistem kantin dan pilihan QRIS tidak memproses pembayaran. Sumber foto dan lisensinya dicatat di `assets/images/README.txt`.
