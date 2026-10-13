@@ -846,7 +846,26 @@ void showFoodDetail(BuildContext context, Food food, VoidCallback onAdd) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
     ),
-    builder: (context) => Padding(
+    builder: (_) => _FoodDetailSheet(food: food, onAdd: onAdd),
+  );
+}
+
+class _FoodDetailSheet extends StatefulWidget {
+  final Food food;
+  final VoidCallback onAdd;
+  const _FoodDetailSheet({required this.food, required this.onAdd});
+
+  @override
+  State<_FoodDetailSheet> createState() => _FoodDetailSheetState();
+}
+
+class _FoodDetailSheetState extends State<_FoodDetailSheet> {
+  int quantity = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    final food = widget.food;
+    return Padding(
       padding: const EdgeInsets.fromLTRB(24, 14, 24, 30),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -864,15 +883,7 @@ void showFoodDetail(BuildContext context, Food food, VoidCallback onAdd) {
           ),
           const SizedBox(height: 24),
           Center(
-            child: Container(
-              width: 130,
-              height: 125,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE5EFE3),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: FoodPhoto(food: food, width: 130, height: 125, radius: 24),
-            ),
+            child: FoodPhoto(food: food, width: 130, height: 125, radius: 24),
           ),
           const SizedBox(height: 18),
           Text(
@@ -884,7 +895,7 @@ void showFoodDetail(BuildContext context, Food food, VoidCallback onAdd) {
             children: [
               const Icon(Icons.star, size: 18, color: Color(0xFFE9A23B)),
               Text(
-                ' ${food.rating}  •  ${food.category}',
+                ' ${food.rating}  ?  ${food.category}',
                 style: const TextStyle(color: Colors.black54),
               ),
             ],
@@ -894,26 +905,67 @@ void showFoodDetail(BuildContext context, Food food, VoidCallback onAdd) {
             food.description,
             style: const TextStyle(height: 1.5, color: Colors.black87),
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'Jumlah pesanan',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ),
+              IconButton(
+                onPressed: quantity > 1
+                    ? () => setState(() => quantity--)
+                    : null,
+                icon: const Icon(Icons.remove_circle_outline),
+              ),
+              Text(
+                '$quantity',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              IconButton(
+                onPressed: () => setState(() => quantity++),
+                icon: const Icon(Icons.add_circle_outline, color: kGreen),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
-                child: Text(
-                  rupiah(food.price),
-                  style: const TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.w800,
-                    color: kGreen,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Total harga',
+                      style: TextStyle(color: Colors.black54, fontSize: 12),
+                    ),
+                    Text(
+                      rupiah(food.price * quantity),
+                      style: const TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.w800,
+                        color: kGreen,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               FilledButton.icon(
                 onPressed: () {
-                  onAdd();
+                  for (var i = 0; i < quantity; i++) {
+                    widget.onAdd();
+                  }
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${food.name} ditambahkan ke pesanan'),
+                      content: Text(
+                        '$quantity ? ${food.name} ditambahkan ke keranjang',
+                      ),
                     ),
                   );
                 },
@@ -924,8 +976,8 @@ void showFoodDetail(BuildContext context, Food food, VoidCallback onAdd) {
           ),
         ],
       ),
-    ),
-  );
+    );
+  }
 }
 
 class OrderPage extends StatefulWidget {
